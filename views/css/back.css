@@ -19,7 +19,7 @@
 *
 * @author    rrd <rrd@webmania.cc>
 * @copyright 2020 rrd
-* @license   http://www.gnu.org/licenses/gpl-3.0.html  GNU GENERAL PUBLIC LICENSE (GPL V3.0)
+* @license   http://opensource.org/licenses/afl-3.0.php
 * @version   0.0.1
 *
 * Don't forget to prefix your containers with your own identifier
