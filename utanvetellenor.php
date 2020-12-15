@@ -140,7 +140,7 @@ class Utanvetellenor extends Module
                         'label' => $this->l('Live mode'),
                         'name' => 'UTANVETELLENOR_LIVE_MODE',
                         'is_bool' => true,
-                        'desc' => $this->l('Use this module in live mode'),
+                        'desc' => $this->l('Live or Sandbox mode'),
                         'values' => array(
                             array(
                                 'id' => 'active_on',
