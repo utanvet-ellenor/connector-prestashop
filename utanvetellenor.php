@@ -51,7 +51,7 @@ class Utanvetellenor extends Module
         $this->displayName = $this->l('Utánvét Ellenőr');
         $this->description = $this->l('Check customers if they are ok to show COD');
 
-        $this->confirmUninstall = $this->l('');
+        $this->confirmUninstall = $this->l('Are you sure you want to uninstall Utánvét Ellenőr?');
 
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
     }
