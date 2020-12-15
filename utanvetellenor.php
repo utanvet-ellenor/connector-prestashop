@@ -62,7 +62,7 @@ class Utanvetellenor extends Module
      */
     public function install()
     {
-        Configuration::updateValue('UANVETELLENOR_LIVE_MODE', false);
+        Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', false);
 
         return parent::install() &&
             $this->registerHook('header') &&
@@ -72,7 +72,7 @@ class Utanvetellenor extends Module
 
     public function uninstall()
     {
-        Configuration::deleteByName('UANVETELLENOR_LIVE_MODE');
+        Configuration::deleteByName('UTANVETELLENOR_LIVE_MODE');
 
         return parent::uninstall();
     }
@@ -139,7 +139,7 @@ class Utanvetellenor extends Module
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Live mode'),
-                        'name' => 'UANVETELLENOR_LIVE_MODE',
+                        'name' => 'UTANVETELLENOR_LIVE_MODE',
                         'is_bool' => true,
                         'desc' => $this->l('Use this module in live mode'),
                         'values' => array(
@@ -156,17 +156,28 @@ class Utanvetellenor extends Module
                         ),
                     ),
                     array(
-                        'col' => 3,
+                        'col' => 6,
                         'type' => 'text',
-                        'prefix' => '<i class="icon icon-envelope"></i>',
-                        'desc' => $this->l('Enter a valid email address'),
-                        'name' => 'UANVETELLENOR_ACCOUNT_EMAIL',
-                        'label' => $this->l('Email'),
+                        'prefix' => '<i class="icon icon-key"></i>',
+                        'desc' => $this->l('Public API Key generated at https://utanvet-ellenor.hu/'),
+                        'name' => 'UTANVETELLENOR_PUBLIC_KEY',
+                        'label' => $this->l('Public API Key'),
                     ),
                     array(
-                        'type' => 'password',
-                        'name' => 'UANVETELLENOR_ACCOUNT_PASSWORD',
-                        'label' => $this->l('Password'),
+                        'col' => 6,
+                        'type' => 'text',
+                        'prefix' => '<i class="icon icon-key"></i>',
+                        'desc' => $this->l('Private API Key generated at https://utanvet-ellenor.hu/'),
+                        'name' => 'UTANVETELLENOR_PRIVATE_KEY',
+                        'label' => $this->l('Private API Key'),
+                    ),
+                    array(
+                        'col' => 2,
+                        'type' => 'text',
+                        'prefix' => '<i class="icon icon-star"></i>',
+                        'desc' => $this->l('Calculated with the following formula: (good-bad) / all, so a 0.5 reputation can mean 6 successful and 2 rejected deliveries.'),
+                        'name' => 'UTANVETELLENOR_THRESHOLD',
+                        'label' => $this->l('Reputation threshold'),
                     ),
                 ),
                 'submit' => array(
@@ -182,9 +193,10 @@ class Utanvetellenor extends Module
     protected function getConfigFormValues()
     {
         return array(
-            'UANVETELLENOR_LIVE_MODE' => Configuration::get('UANVETELLENOR_LIVE_MODE', true),
-            'UANVETELLENOR_ACCOUNT_EMAIL' => Configuration::get('UANVETELLENOR_ACCOUNT_EMAIL', 'contact@prestashop.com'),
-            'UANVETELLENOR_ACCOUNT_PASSWORD' => Configuration::get('UANVETELLENOR_ACCOUNT_PASSWORD', null),
+            'UTANVETELLENOR_LIVE_MODE' => Configuration::get('UTANVETELLENOR_LIVE_MODE', false),
+            'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY', null),
+            'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY', null),
+            'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD', 0,5),
         );
     }
 
