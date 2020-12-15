@@ -155,7 +155,7 @@ class Utanvetellenor extends Module
                         ),
                     ),
                     array(
-                        'col' => 6,
+                        'col' => 4,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-key"></i>',
                         'desc' => $this->l('Public API Key generated at https://utanvet-ellenor.hu/'),
@@ -163,7 +163,7 @@ class Utanvetellenor extends Module
                         'label' => $this->l('Public API Key'),
                     ),
                     array(
-                        'col' => 6,
+                        'col' => 4,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-key"></i>',
                         'desc' => $this->l('Private API Key generated at https://utanvet-ellenor.hu/'),
@@ -171,7 +171,7 @@ class Utanvetellenor extends Module
                         'label' => $this->l('Private API Key'),
                     ),
                     array(
-                        'col' => 2,
+                        'col' => 4,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-star"></i>',
                         'desc' => $this->l('Calculated with the following formula: (good-bad) / all, so a 0.5 reputation can mean 6 successful and 2 rejected deliveries.'),
