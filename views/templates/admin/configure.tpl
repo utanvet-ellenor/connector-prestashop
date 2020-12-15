@@ -17,10 +17,10 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2020 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+* @author    rrd <rrd@webmania.cc>
+* @copyright 2020 rrd
+* @license   http://www.gnu.org/licenses/gpl-3.0.html  GNU GENERAL PUBLIC LICENSE (GPL V3.0)
+* @version   0.0.1
 *}
 
 <div class="panel">
@@ -33,16 +33,5 @@
 	<br />
 	<p>
 		{l s='This module will boost your sales!' mod='utanvetellenor'}
-	</p>
-</div>
-
-<div class="panel">
-	<h3><i class="icon icon-tags"></i> {l s='Documentation' mod='utanvetellenor'}</h3>
-	<p>
-		&raquo; {l s='You can get a PDF documentation to configure this module' mod='utanvetellenor'} :
-		<ul>
-			<li><a href="#" target="_blank">{l s='English' mod='utanvetellenor'}</a></li>
-			<li><a href="#" target="_blank">{l s='French' mod='utanvetellenor'}</a></li>
-		</ul>
 	</p>
 </div>
