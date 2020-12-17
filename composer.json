@@ -1,0 +1,18 @@
+{
+  "name": "rrd108/ps-utanvet-ellenor",
+  "description": "UVB Connector for Prestashop",
+  "minimum-stability": "stable",
+  "version": "0.0.1",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "rrd",
+      "email": "rrd@webmania.cc",
+      "homepage": "https://webmania.cc"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "webmenedzser/uvb-connector": "^1.0.1"
+  }
+}
