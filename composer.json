@@ -15,6 +15,11 @@
     "php": ">=7.0",
     "webmenedzser/uvb-connector": "^1.0.1"
   },
+  "autoload": {
+    "psr-4": {
+      "webmenedzser\\UVBConnector\\": "src/"
+    }
+  },
   "config": {
     "preferred-install": "dist",
     "prepend-autoloader": false
