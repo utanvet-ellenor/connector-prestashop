@@ -87,7 +87,7 @@ class Utanvetellenor extends Module
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
-            $this->registerHook('displayBeforeCarrier');
+            $this->registerHook('actionOrderStatusUpdate');
     }
 
     public function uninstall()
@@ -258,8 +258,11 @@ class Utanvetellenor extends Module
         $this->context->controller->addCSS($this->_path.'/views/css/front.css');
     }
 
-    public function hookDisplayBeforeCarrier()
+    public function hookActionOrderStatusUpdate($params)
     {
-        /* Place your code here. */
+        // TODO add configure option: which status is payed?
+        // if ($params['newOrderStatus']->id == $payedStatus) {
+            // sned the info the the API
+        //}
     }
 }
