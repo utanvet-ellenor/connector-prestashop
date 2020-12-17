@@ -63,6 +63,27 @@ class Utanvetellenor extends Module
     {
         Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', false);
 
+        if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
+            $orderState = new OrderState();
+            $orderState->name = array();
+            foreach (Language::getLanguages() as $language) {
+                $orderState->name[$language['id_lang']] = $this->l('Package Refused');
+            }
+            $orderState->send_email = false;
+            $orderState->color = '#AC448A';
+            $orderState->hidden = false;
+            $orderState->delivery = false;
+            $orderState->logable = false;
+            $orderState->invoice = false;
+            $orderState->module_name = $this->name;
+            if ($orderState->add()) {
+                copy(
+                    dirname(__FILE__).'/views/img/utanvet_ellenor_logo.gif',
+                    dirname(__FILE__).'/../../img/os/'.(int) $orderState->id.'.gif'
+                );
+            }
+            Configuration::updateValue('UTANVETELLENOR_REFUSED_ORDERSTATE', (int) $orderState->id);
+        }
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
@@ -72,6 +93,12 @@ class Utanvetellenor extends Module
     public function uninstall()
     {
         Configuration::deleteByName('UTANVETELLENOR_LIVE_MODE');
+
+        $orderState = new OrderState((int) Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'));
+        if ($orderState->id) {
+            $orderState->delete();
+        }
+
 
         return parent::uninstall();
     }
