@@ -28,6 +28,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use webmenedzser\UVBConnector\UVBConnector;
+
 class Utanvetellenor extends Module
 {
     protected $config_form = false;
@@ -278,10 +280,15 @@ class Utanvetellenor extends Module
 
     public function hookActionOrderStatusUpdate($params)
     {
-        // TODO add configure option: which status is payed?
-        // if ($params['newOrderStatus']->id == $payedStatus) {
-            // send the info the the API only if this was a COD order
-            // call the API in the background, do not wait here with the main thread
-        //}
+        if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
+            $order = new Order($params['id_order']);
+            // $order->payment can be checked
+            $customer = new Customer((int) $params['cart']->id_customer);
+
+            // FIXME Prestashop uses guzzle 5, this module uses guzzle 6, so we have a big fat hairy conflict
+            $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
+
+            $response = $connector->post(1); // -1 when refused
+        }
     }
 }
