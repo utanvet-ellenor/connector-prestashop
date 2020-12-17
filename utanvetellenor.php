@@ -62,6 +62,7 @@ class Utanvetellenor extends Module
     public function install()
     {
         Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', false);
+        Configuration::updateValue('UTANVETELLENOR_PAYED_ORDERSTATE', 4);
 
         if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
             $orderState = new OrderState();
@@ -93,12 +94,12 @@ class Utanvetellenor extends Module
     public function uninstall()
     {
         Configuration::deleteByName('UTANVETELLENOR_LIVE_MODE');
+        Configuration::deleteByName('UTANVETELLENOR_PAYED_ORDERSTATE');
 
         $orderState = new OrderState((int) Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'));
         if ($orderState->id) {
             $orderState->delete();
         }
-
 
         return parent::uninstall();
     }
@@ -155,6 +156,8 @@ class Utanvetellenor extends Module
      */
     protected function getConfigForm()
     {
+        $orderStates = OrderState::getOrderStates($this->context->language->id);
+
         return array(
             'form' => array(
                 'legend' => array(
@@ -188,6 +191,7 @@ class Utanvetellenor extends Module
                         'desc' => $this->l('Public API Key generated at https://utanvet-ellenor.hu/'),
                         'name' => 'UTANVETELLENOR_PUBLIC_KEY',
                         'label' => $this->l('Public API Key'),
+                        'required' => true,
                     ),
                     array(
                         'col' => 4,
@@ -196,6 +200,7 @@ class Utanvetellenor extends Module
                         'desc' => $this->l('Private API Key generated at https://utanvet-ellenor.hu/'),
                         'name' => 'UTANVETELLENOR_PRIVATE_KEY',
                         'label' => $this->l('Private API Key'),
+                        'required' => true,
                     ),
                     array(
                         'col' => 4,
@@ -204,6 +209,18 @@ class Utanvetellenor extends Module
                         'desc' => $this->l('Calculated with the following formula: (good-bad) / all, so a 0.5 reputation can mean 6 successful and 2 rejected deliveries.'),
                         'name' => 'UTANVETELLENOR_THRESHOLD',
                         'label' => $this->l('Reputation threshold'),
+                    ),
+                    array(
+                        'type' => 'select',
+                        'label' => $this->l('Payed - Change Order Status to'),
+                        'desc' => $this->l('Status on payed COD orders'),
+                        'name' => 'UTANVETELLENOR_PAYED_ORDERSTATE',
+                        'required' => true,
+                        'options' => array(
+                            'query' => $orderStates,
+                            'id' => 'id_order_state',
+                            'name' => 'name'
+                        )
                     ),
                 ),
                 'submit' => array(
@@ -223,6 +240,7 @@ class Utanvetellenor extends Module
             'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY', null),
             'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY', null),
             'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD', 0,5),
+            'UTANVETELLENOR_PAYED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE', 4),
         );
     }
 
