@@ -262,7 +262,8 @@ class Utanvetellenor extends Module
     {
         // TODO add configure option: which status is payed?
         // if ($params['newOrderStatus']->id == $payedStatus) {
-            // sned the info the the API
+            // send the info the the API only if this was a COD order
+            // call the API in the background, do not wait here with the main thread
         //}
     }
 }
