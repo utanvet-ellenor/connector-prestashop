@@ -65,7 +65,7 @@ class Utanvetellenor extends Module
      */
     public function install()
     {
-        Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', false);
+        Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', true);
         Configuration::updateValue('UTANVETELLENOR_PAYED_ORDERSTATE', 4);
 
         if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
