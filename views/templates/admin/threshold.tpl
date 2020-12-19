@@ -1,4 +1,4 @@
-/**
+{*
 * 2007-2020 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -21,7 +21,16 @@
 * @copyright 2020 rrd
 * @license   http://opensource.org/licenses/afl-3.0.php
 * @version   0.0.1
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
+*}
+
+<div class="panel">
+	<h3><i class="icon icon-credit-card"></i> {l s='Utánvét Ellenőr' mod='utanvetellenor'} {$threshold}</h3>
+	<p>
+		<strong>{l s='Check your customer\'s reputation for COD' mod='utanvetellenor'}</strong><br />
+		{l s='Customers under the specified threshold will not able to order via COD, the option will not be displayed for them.' mod='utanvetellenor'}<br />
+	</p>
+	<br />
+	<p>
+		{l s='This module will help you to minimalize refused COD packages.' mod='utanvetellenor'}
+	</p>
+</div>
