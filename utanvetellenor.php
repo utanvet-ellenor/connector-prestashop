@@ -89,7 +89,6 @@ class Utanvetellenor extends Module
         }
         return parent::install() &&
             $this->registerHook('header') &&
-            $this->registerHook('backOfficeHeader') &&
             $this->registerHook('actionOrderStatusUpdate');
     }
 
@@ -259,19 +258,9 @@ class Utanvetellenor extends Module
     }
 
     /**
-    * Add the CSS & JavaScript files you want to be loaded in the BO.
-    */
-    public function hookBackOfficeHeader()
-    {
-        if (Tools::getValue('module_name') == $this->name) {
-            $this->context->controller->addJS($this->_path.'views/js/back.js');
-            $this->context->controller->addCSS($this->_path.'views/css/back.css');
-        }
-    }
-
-    /**
      * Add the CSS & JavaScript files you want to be added on the FO.
      */
+    // TODO remove this
     public function hookHeader()
     {
         $this->context->controller->addJS($this->_path.'/views/js/front.js');
