@@ -89,6 +89,7 @@ class Utanvetellenor extends Module
         }
         return parent::install() &&
             $this->registerHook('header') &&
+            $this->registerHook('paymentOptions') &&
             $this->registerHook('actionOrderStatusUpdate');
     }
 
@@ -289,5 +290,10 @@ class Utanvetellenor extends Module
 
         /*
         AdminOrders / view
+    public function hookPaymentOptions($params)
+    {
+        var_dump($params);
+    }
+
     }
 }
