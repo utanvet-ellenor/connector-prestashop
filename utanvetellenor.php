@@ -55,6 +55,8 @@ class Utanvetellenor extends Module
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall Utánvét Ellenőr?');
 
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+
+        // TODO add checks of the override
     }
 
     /**
@@ -277,23 +279,14 @@ class Utanvetellenor extends Module
             $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
             if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
                 $response = $connector->post(1);
-                /* if (json_decode($response)->status != 200) {
-                    $logger = new FileLogger(0);
-                    $logger->setFilename(_PS_ROOT_DIR_."/var/logs/utanvet-ellenor.log");
-                    $logger->logDebug("API response status is not 200. " . $response);
-                } */
             }
             if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
                 $response = $connector->post(-1);
             }
         }
-
-        /*
-        AdminOrders / view
-    public function hookPaymentOptions($params)
-    {
-        var_dump($params);
     }
 
-    }
+
+    // TODO display current threshold to admin on the order page - widget?
+
 }
