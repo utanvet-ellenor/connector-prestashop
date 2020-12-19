@@ -287,6 +287,11 @@ class Utanvetellenor extends Module
             $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
             if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
                 $response = $connector->post(1);
+                /* if (json_decode($response)->status != 200) {
+                    $logger = new FileLogger(0);
+                    $logger->setFilename(_PS_ROOT_DIR_."/var/logs/utanvet-ellenor.log");
+                    $logger->logDebug("API response status is not 200. " . $response);
+                } */
             }
             if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
                 $response = $connector->post(-1);
