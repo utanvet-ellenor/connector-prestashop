@@ -34,6 +34,7 @@ class PaymentOptionsFinder extends PaymentOptionsFinderCore
 
         $customer = Context::getContext()->customer;
         $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
+        $connector->threshold = Configuration::get('UTANVETELLENOR_THRESHOLD');
         $reputation = json_decode($connector->get());
 
         if($reputation->status == 200 & $reputation->totalRate < Configuration::get('UTANVETELLENOR_THRESHOLD')) {
