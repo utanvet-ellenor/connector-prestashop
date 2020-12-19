@@ -280,15 +280,20 @@ class Utanvetellenor extends Module
 
     public function hookActionOrderStatusUpdate($params)
     {
-        if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
-            $order = new Order($params['id_order']);
-            // $order->payment can be checked
+        if (in_array(
+            $params['newOrderStatus']->id,
+            [Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE'), Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')])) {
             $customer = new Customer((int) $params['cart']->id_customer);
-
-            // FIXME Prestashop uses guzzle 5, this module uses guzzle 6, so we have a big fat hairy conflict
             $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
-
-            $response = $connector->post(1); // -1 when refused
+            if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
+                $response = $connector->post(1);
+            }
+            if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
+                $response = $connector->post(-1);
+            }
         }
+
+        /*
+        AdminOrders / view
     }
 }
