@@ -277,6 +277,7 @@ class Utanvetellenor extends Module
         if (in_array(
             $params['newOrderStatus']->id,
             [Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE'), Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')])) {
+            // we send in all customers, not just who payed via COD
             $customer = new Customer((int) $params['cart']->id_customer);
             $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
             if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
