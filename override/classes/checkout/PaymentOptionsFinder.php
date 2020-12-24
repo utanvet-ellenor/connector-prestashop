@@ -37,7 +37,7 @@ class PaymentOptionsFinder extends PaymentOptionsFinderCore
         $connector->threshold = Configuration::get('UTANVETELLENOR_THRESHOLD');
         $reputation = json_decode($connector->get());
 
-        if($reputation->status == 200 && $reputation->message->totalRate < Configuration::get('UTANVETELLENOR_THRESHOLD')) {
+        if($reputation->message->totalRate < Configuration::get('UTANVETELLENOR_THRESHOLD')) {
             $filteredPaymentOptions = [];
             foreach($paymentOptions as $module => $paymentOption) {
                 if(stripos($module, 'cod') === false) {
