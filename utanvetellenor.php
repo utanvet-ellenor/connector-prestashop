@@ -55,8 +55,6 @@ class Utanvetellenor extends Module
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall Utánvét Ellenőr?');
 
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
-
-        // TODO add checks of the override
     }
 
     /**
@@ -123,6 +121,9 @@ class Utanvetellenor extends Module
         }
 
         $this->context->smarty->assign('module_dir', $this->_path);
+
+        $overrideExists = file_exists(_PS_ROOT_DIR_ . '/override/classes/checkout/PaymentOptionsFinder.php');
+        $this->context->smarty->assign('overrideExists', $overrideExists);
 
         $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
 

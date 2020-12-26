@@ -34,3 +34,14 @@
 		{l s='This module will help you to minimalize refused COD packages.' mod='utanvetellenor'}
 	</p>
 </div>
+
+<div class="panel">
+	<h3><i class="icon icon-cogs"></i> {l s='Override' mod='utanvetellenor'}</h3>
+	<p>
+		{if $overrideExists}
+			{l s='Override install is OK' mod='utanvetellenor'}
+		{else}
+			{l s='ERROR: Override is not installed' mod='utanvetellenor'}
+		{/if}
+	</p>
+</div>
