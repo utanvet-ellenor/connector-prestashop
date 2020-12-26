@@ -20,7 +20,7 @@
 * @author    rrd <rrd@webmania.cc>
 * @copyright 2020 rrd
 * @license   http://opensource.org/licenses/afl-3.0.php
-* @version   0.0.1
+* @version   0.0.2
 *}
 
 <div class="panel">

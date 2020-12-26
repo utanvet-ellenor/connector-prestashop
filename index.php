@@ -21,7 +21,7 @@
 * @author    rrd <rrd@webmania.cc>
 * @copyright 2020 rrd
 * @license   http://opensource.org/licenses/afl-3.0.php
-* @version   0.0.1
+* @version   0.0.2
 */
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
