@@ -37,11 +37,13 @@
 
 <div class="panel">
 	<h3><i class="icon icon-cogs"></i> {l s='Override' mod='utanvetellenor'}</h3>
-	<p>
 		{if $overrideExists}
-			{l s='Override install is OK' mod='utanvetellenor'}
+			<p class="alert alert-success">
+				{l s='Override install is OK' mod='utanvetellenor'}
+			</p>
 		{else}
-			{l s='ERROR: Override is not installed' mod='utanvetellenor'}
+			<p class="alert alert-danger">
+				{l s='ERROR: Override is not installed' mod='utanvetellenor'}
+			</p>
 		{/if}
-	</p>
 </div>
