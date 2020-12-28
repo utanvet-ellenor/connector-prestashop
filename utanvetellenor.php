@@ -229,6 +229,18 @@ class Utanvetellenor extends Module
                             'name' => 'name'
                         )
                     ),
+                    array(
+                        'type' => 'select',
+                        'label' => $this->l('Refused - Change Order Status to'),
+                        'desc' => $this->l('Status on refused COD orders'),
+                        'name' => 'UTANVETELLENOR_REFUSED_ORDERSTATE',
+                        'required' => true,
+                        'options' => array(
+                            'query' => $orderStates,
+                            'id' => 'id_order_state',
+                            'name' => 'name'
+                        )
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -248,6 +260,7 @@ class Utanvetellenor extends Module
             'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY', null),
             'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD', 0,5),
             'UTANVETELLENOR_PAID_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE', 4),
+            'UTANVETELLENOR_REFUSED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE', 4),
         );
     }
 
