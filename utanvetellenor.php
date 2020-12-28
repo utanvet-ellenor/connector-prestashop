@@ -21,7 +21,7 @@
 * @author    rrd <rrd@webmania.cc>
 * @copyright 2020 rrd
 * @license   http://opensource.org/licenses/afl-3.0.php
-* @version   0.0.2
+* @version   0.0.3
 */
 
 if (!defined('_PS_VERSION_')) {
@@ -38,7 +38,7 @@ class Utanvetellenor extends Module
     {
         $this->name = 'utanvetellenor';
         $this->tab = 'checkout';
-        $this->version = '0.0.2';
+        $this->version = '0.0.3';
         $this->author = 'rrd';
         $this->need_instance = 1;
 

@@ -20,7 +20,7 @@
 * @author    rrd <rrd@webmania.cc>
 * @copyright 2020 rrd
 * @license   http://opensource.org/licenses/afl-3.0.php
-* @version   0.0.2
+* @version   0.0.3
 *
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
