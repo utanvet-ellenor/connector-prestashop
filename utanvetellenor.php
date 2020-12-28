@@ -64,7 +64,7 @@ class Utanvetellenor extends Module
     public function install()
     {
         Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', true);
-        Configuration::updateValue('UTANVETELLENOR_PAYED_ORDERSTATE', 4);
+        Configuration::updateValue('UTANVETELLENOR_PAID_ORDERSTATE', 4);
 
         if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
             $orderState = new OrderState();
@@ -95,7 +95,7 @@ class Utanvetellenor extends Module
     public function uninstall()
     {
         Configuration::deleteByName('UTANVETELLENOR_LIVE_MODE');
-        Configuration::deleteByName('UTANVETELLENOR_PAYED_ORDERSTATE');
+        Configuration::deleteByName('UTANVETELLENOR_PAID_ORDERSTATE');
 
         $this->unregisterHook('header');
         $this->unregisterHook('actionOrderStatusUpdate');
@@ -221,7 +221,7 @@ class Utanvetellenor extends Module
                         'type' => 'select',
                         'label' => $this->l('Payed - Change Order Status to'),
                         'desc' => $this->l('Status on payed COD orders'),
-                        'name' => 'UTANVETELLENOR_PAYED_ORDERSTATE',
+                        'name' => 'UTANVETELLENOR_PAID_ORDERSTATE',
                         'required' => true,
                         'options' => array(
                             'query' => $orderStates,
@@ -247,7 +247,7 @@ class Utanvetellenor extends Module
             'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY', null),
             'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY', null),
             'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD', 0,5),
-            'UTANVETELLENOR_PAYED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE', 4),
+            'UTANVETELLENOR_PAID_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE', 4),
         );
     }
 
