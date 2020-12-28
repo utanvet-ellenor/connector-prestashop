@@ -13,7 +13,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "webmenedzser/uvb-connector": "dev-master"
+    "webmenedzser/uvb-connector": "^1.3.0"
   },
   "autoload": {
     "psr-4": {
