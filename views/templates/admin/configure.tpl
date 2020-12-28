@@ -47,3 +47,12 @@
 			</p>
 		{/if}
 </div>
+
+{if $update}
+<div class="panel">
+	<h3><i class="icon icon-cogs"></i> {l s='Update' mod='utanvetellenor'}</h3>
+	<p class="alert alert-danger">
+		{l s='Update available' mod='utanvetellenor'} <a href="{$update->download_url}">{$update->version} ({$update->last_updated})</a>
+	</p>
+</div>
+{/if}
