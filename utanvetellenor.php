@@ -1,28 +1,28 @@
 <?php
 /**
-* 2007-2020 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-* @author    rrd <rrd@webmania.cc>
-* @copyright 2020 rrd
-* @license   http://opensource.org/licenses/afl-3.0.php
-* @version   0.0.3
-*/
+ * 2007-2020 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    rrd <rrd@webmania.cc>
+ * @copyright 2020 rrd
+ * @license   http://opensource.org/licenses/afl-3.0.php
+ * @version   0.0.2
+ */
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -30,6 +30,11 @@ if (!defined('_PS_VERSION_')) {
 
 use webmenedzser\UVBConnector\UVBConnector;
 
+/**
+ * Class Utanvetellenor
+ *
+ * @todo display current threshold to admin on the order page - widget?
+ */
 class Utanvetellenor extends Module
 {
     protected $config_form = false;
@@ -63,47 +68,34 @@ class Utanvetellenor extends Module
      */
     public function install()
     {
-        Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', true);
-        Configuration::updateValue('UTANVETELLENOR_PAYED_ORDERSTATE', 4);
+        Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', false);
+        Configuration::updateValue('UTANVETELLENOR_PUBLIC_KEY', '');
+        Configuration::updateValue('UTANVETELLENOR_PRIVATE_KEY', '');
+        Configuration::updateValue('UTANVETELLENOR_THRESHOLD', 0);
+        Configuration::updateValue('UTANVETELLENOR_PAID_ORDERSTATE', 4);
+        Configuration::updateValue('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE', '');
 
         if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
-            $orderState = new OrderState();
-            $orderState->name = array();
-            foreach (Language::getLanguages() as $language) {
-                $orderState->name[$language['id_lang']] = $this->l('Package Refused');
-            }
-            $orderState->send_email = false;
-            $orderState->color = '#AC448A';
-            $orderState->hidden = false;
-            $orderState->delivery = false;
-            $orderState->logable = false;
-            $orderState->invoice = false;
-            $orderState->module_name = $this->name;
-            if ($orderState->add()) {
-                copy(
-                    dirname(__FILE__).'/views/img/utanvet_ellenor_logo.gif',
-                    dirname(__FILE__).'/../../img/os/'.(int) $orderState->id.'.gif'
-                );
-            }
-            Configuration::updateValue('UTANVETELLENOR_REFUSED_ORDERSTATE', (int) $orderState->id);
+            Configuration::updateValue('UTANVETELLENOR_REFUSED_ORDERSTATE', $this->createRefusedOrderState());
         }
+
         return parent::install() &&
             $this->registerHook('header') &&
-            $this->registerHook('actionOrderStatusUpdate');
+            $this->registerHook('actionOrderStatusPostUpdate');
     }
 
     public function uninstall()
     {
         Configuration::deleteByName('UTANVETELLENOR_LIVE_MODE');
-        Configuration::deleteByName('UTANVETELLENOR_PAYED_ORDERSTATE');
+        Configuration::deleteByName('UTANVETELLENOR_PUBLIC_KEY');
+        Configuration::deleteByName('UTANVETELLENOR_PRIVATE_KEY');
+        Configuration::deleteByName('UTANVETELLENOR_THRESHOLD');
+        Configuration::deleteByName('UTANVETELLENOR_PAID_ORDERSTATE');
+        Configuration::deleteByName('UTANVETELLENOR_REFUSED_ORDERSTATE');
+        Configuration::deleteByName('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
 
         $this->unregisterHook('header');
-        $this->unregisterHook('actionOrderStatusUpdate');
-
-        $orderState = new OrderState((int) Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'));
-        if ($orderState->id) {
-            $orderState->delete();
-        }
+        $this->unregisterHook('actionOrderStatusPostUpdate');
 
         return parent::uninstall();
     }
@@ -113,13 +105,7 @@ class Utanvetellenor extends Module
      */
     public function getContent()
     {
-        /**
-         * If values have been submitted in the form, process.
-         */
-        if (((bool)Tools::isSubmit('submitUtanvetellenorModule')) == true) {
-            $this->postProcess();
-        }
-
+        $this->postProcess();
         $this->context->smarty->assign('module_dir', $this->_path);
 
         $overrideExists = file_exists(_PS_ROOT_DIR_ . '/override/classes/checkout/PaymentOptionsFinder.php');
@@ -164,6 +150,17 @@ class Utanvetellenor extends Module
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => $this->context->language->id,
         );
+        $paymentMethodsToHide = Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
+
+        if ($paymentMethodsToHide) {
+            $paymentMethodsToHide = explode(',', $paymentMethodsToHide);
+
+            if (!empty($paymentMethodsToHide)) {
+                foreach ($paymentMethodsToHide as $key => $value) {
+                    $helper->tpl_vars['fields_value']['UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE[]_' . $value] = true;
+                }
+            }
+        }
 
         return $helper->generateForm(array($this->getConfigForm()));
     }
@@ -174,12 +171,17 @@ class Utanvetellenor extends Module
     protected function getConfigForm()
     {
         $orderStates = OrderState::getOrderStates($this->context->language->id);
+        $paymentMethodsToHide = Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
+        $availablePaymentMethods = PaymentModule::getInstalledPaymentModules();
+        foreach ($availablePaymentMethods as $key => $value) {
+            $availablePaymentMethods[$key]['val'] = $value['name'];
+        }
 
         return array(
             'form' => array(
                 'legend' => array(
-                'title' => $this->l('Settings'),
-                'icon' => 'icon-cogs',
+                    'title' => $this->l('Settings'),
+                    'icon' => 'icon-cogs',
                 ),
                 'input' => array(
                     array(
@@ -229,15 +231,40 @@ class Utanvetellenor extends Module
                     ),
                     array(
                         'type' => 'select',
-                        'label' => $this->l('Payed - Change Order Status to'),
-                        'desc' => $this->l('Status on payed COD orders'),
-                        'name' => 'UTANVETELLENOR_PAYED_ORDERSTATE',
+                        'label' => $this->l('Successful Status'),
+                        'desc' => $this->l('Status of successful Cash on Delivery orders.'),
+                        'name' => 'UTANVETELLENOR_PAID_ORDERSTATE',
                         'required' => true,
                         'options' => array(
                             'query' => $orderStates,
                             'id' => 'id_order_state',
                             'name' => 'name'
                         )
+                    ),
+                    array(
+                        'type' => 'select',
+                        'label' => $this->l('Refused Status'),
+                        'desc' => $this->l('Status of refused Cash on Delivery orders.'),
+                        'name' => 'UTANVETELLENOR_REFUSED_ORDERSTATE',
+                        'required' => true,
+                        'options' => array(
+                            'query' => $orderStates,
+                            'id' => 'id_order_state',
+                            'name' => 'name'
+                        )
+                    ),
+                    array(
+                        'type' => 'checkbox',
+                        'label' => $this->l('Payment methods to hide'),
+                        'desc' => $this->l('Hide these payment methods if the reputation is below the threshold.'),
+                        'name' => 'UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE[]',
+                        'multiple' => true,
+                        'required' => true,
+                        'values' => array(
+                            'query' => $availablePaymentMethods,
+                            'id' => 'name',
+                            'name' => 'name'
+                        ),
                     ),
                 ),
                 'submit' => array(
@@ -252,13 +279,17 @@ class Utanvetellenor extends Module
      */
     protected function getConfigFormValues()
     {
-        return array(
-            'UTANVETELLENOR_LIVE_MODE' => Configuration::get('UTANVETELLENOR_LIVE_MODE', false),
-            'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY', null),
-            'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY', null),
-            'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD', 0,5),
-            'UTANVETELLENOR_PAYED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE', 4),
-        );
+        $config = [
+            'UTANVETELLENOR_LIVE_MODE' => Configuration::get('UTANVETELLENOR_LIVE_MODE'),
+            'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY'),
+            'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY'),
+            'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD'),
+            'UTANVETELLENOR_PAID_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE'),
+            'UTANVETELLENOR_REFUSED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'),
+            'UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE' => Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE')
+        ];
+
+        return $config;
     }
 
     /**
@@ -266,6 +297,15 @@ class Utanvetellenor extends Module
      */
     protected function postProcess()
     {
+        /**
+         * If values have not been submitted in the form, return.
+         */
+        if (!Tools::isSubmit('submitUtanvetellenorModule')) {
+            return;
+        }
+
+        $_POST['UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE'] = implode(',', $_POST['UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE']);
+
         $form_values = $this->getConfigFormValues();
 
         foreach (array_keys($form_values) as $key) {
@@ -274,33 +314,97 @@ class Utanvetellenor extends Module
     }
 
     /**
-     * Add the CSS & JavaScript files you want to be added on the FO.
+     * Creates the refused order state.
+     *
+     * @return int
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
-    // TODO remove this
-    public function hookHeader()
+    public function createRefusedOrderState()
     {
-        $this->context->controller->addJS($this->_path.'/views/js/front.js');
-        $this->context->controller->addCSS($this->_path.'/views/css/front.css');
-    }
+        $orderState = new OrderState();
+        $orderState->name = array();
 
-    public function hookActionOrderStatusUpdate($params)
-    {
-        if (in_array(
-            $params['newOrderStatus']->id,
-            [Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE'), Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')])) {
-            // we send in all customers, not just who payed via COD
-            $customer = new Customer((int) $params['cart']->id_customer);
-            $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
-            if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
-                $response = $connector->post(1);
-            }
-            if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
-                $response = $connector->post(-1);
-            }
+        foreach (Language::getLanguages() as $language) {
+            $orderState->name[$language['id_lang']] = $this->l('Package Refused');
         }
+
+        $orderState->send_email = false;
+        $orderState->color = '#AC448A';
+        $orderState->hidden = false;
+        $orderState->delivery = false;
+        $orderState->logable = false;
+        $orderState->invoice = false;
+        $orderState->module_name = $this->name;
+
+        if ($orderState->add()) {
+            copy(
+                dirname(__FILE__).'/views/img/utanvet_ellenor_logo.gif',
+                dirname(__FILE__).'/../../img/os/'.(int) $orderState->id.'.gif'
+            );
+        }
+
+        return $orderState->id;
     }
 
+    /**
+     * @param $params
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function hookActionOrderStatusPostUpdate($params)
+    {
+        $orderId = $params['id_order'];
+        $newOrderStatusId = $params['newOrderStatus']->id;
+        $paidOrderState = Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE');
+        $refusedOrderState = Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE');
 
-    // TODO display current threshold to admin on the order page - widget?
+        /**
+         * Check if the new order status is either the paid or the refused order state. If none of them, return.
+         */
+        if (!in_array($newOrderStatusId, [$paidOrderState, $refusedOrderState], false)) {
+            return;
+        }
 
+        /**
+         * If no Customer e-mail is defined for the Order, return.
+         */
+        $order = new Order($orderId);
+        $customer = $order->getCustomer();
+        $email = $customer->email ?? null;
+        if (!$email) {
+            return;
+        }
+
+        /**
+         * Initialize UVB Connector
+         */
+        $publicApiKey = Configuration::get('UTANVETELLENOR_PUBLIC_KEY');
+        $privateApiKey = Configuration::get('UTANVETELLENOR_PRIVATE_KEY');
+        $production = Configuration::get('UTANVETELLENOR_LIVE_MODE');
+
+        /**
+         * If no API keys are set, return.
+         */
+        if (!$publicApiKey || !$privateApiKey) {
+            return;
+        }
+
+        $connector = new UVBConnector(
+            $email,
+            $publicApiKey,
+            $privateApiKey,
+            $production
+        );
+
+        if ($newOrderStatusId == Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE')) {
+            $outcome = 1;
+        }
+        if ($newOrderStatusId == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
+            $outcome = -1;
+        }
+
+        $response = $connector->post($outcome);
+    }
 }
