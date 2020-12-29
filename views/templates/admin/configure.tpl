@@ -26,12 +26,12 @@
 <div class="panel">
 	<h3><i class="icon icon-credit-card"></i> {l s='Utánvét Ellenőr' mod='utanvetellenor'}</h3>
 	<p>
-		<strong>{l s='Check your customer\'s reputation for COD' mod='utanvetellenor'}</strong><br />
-		{l s='Customers under the specified threshold will not able to order via COD, the option will not be displayed for them.' mod='utanvetellenor'}<br />
+		<strong>{l s="Check your customer's reputation for Cash on Delivery" mod='utanvetellenor'}</strong><br />
+		{l s="Customers with a reputation below the threshold will not be able to select Cash on Delivery as their preferred payment method." mod='utanvetellenor'}<br />
 	</p>
 	<br />
 	<p>
-		{l s='This module will help you to minimalize refused COD packages.' mod='utanvetellenor'}
+		{l s="This module helps you minimize the risk of sending out packages resulting in unsuccessful deliveries." mod='utanvetellenor'}
 	</p>
 </div>
 
