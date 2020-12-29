@@ -22,7 +22,7 @@
     "changelog": "auto-changelog -p",
     "version": "npm run replace-version && npm run changelog && git add -A",
     "postversion": "git push && git push --tags",
-    "replace-version": "replace-in-file --configFile ./.replace-in-file.config.js"
+    "replace-version": "replace-in-file --configFile ./.composer-version.js"
   },
   "devDependencies": {
     "auto-changelog": "^2.2.1",
