@@ -1,0 +1,31 @@
+{
+  "name": "ps-utanvet-ellenor",
+  "description": "Utánvét Ellenőr integration for Prestashop",
+  "version": "1.0.0",
+  "author": [
+    {
+      "name": "rrd",
+      "email": "rrd@webmania.cc",
+      "homepage": "https://webmania.cc"
+    },
+    {
+      "name": "dr. Otto Radics",
+      "email": "otto@webmenedzser.hu",
+      "url": "https://www.webmenedzser.hu"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rrd108/ps-utanvet-ellenor.git"
+  },
+  "scripts": {
+    "changelog": "auto-changelog -p",
+    "version": "npm run replace-version && npm run changelog && git add -A",
+    "postversion": "git push && git push --tags",
+    "replace-version": "replace-in-file --configFile ./.replace-in-file.config.js"
+  },
+  "devDependencies": {
+    "auto-changelog": "^2.2.1",
+    "replace-in-file": "^6.1.0"
+  }
+}
