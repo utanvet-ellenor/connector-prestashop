@@ -30,6 +30,11 @@ if (!defined('_PS_VERSION_')) {
 
 use webmenedzser\UVBConnector\UVBConnector;
 
+/**
+ * Class Utanvetellenor
+ *
+ * @todo display current threshold to admin on the order page - widget?
+ */
 class Utanvetellenor extends Module
 {
     protected $config_form = false;
