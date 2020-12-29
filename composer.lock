@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5dc62e9626d1705abc04e11091ea466",
+    "content-hash": "ba537f833119cdb7851eeca337c7d47e",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -553,7 +553,7 @@
         },
         {
             "name": "webmenedzser/uvb-connector",
-            "version": "dev-master",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmenedzser/uvb-connector.git",
@@ -569,7 +569,6 @@
                 "guzzlehttp/guzzle": "^5.3 || ^6.3",
                 "php": ">=7.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -598,9 +597,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "webmenedzser/uvb-connector": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

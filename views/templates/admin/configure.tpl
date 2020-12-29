@@ -20,7 +20,7 @@
 * @author    rrd <rrd@webmania.cc>
 * @copyright 2020 rrd
 * @license   http://opensource.org/licenses/afl-3.0.php
-* @version   0.0.2
+* @version   0.0.3
 *}
 
 <div class="panel">
@@ -47,3 +47,12 @@
 			</p>
 		{/if}
 </div>
+
+{if $update}
+<div class="panel">
+	<h3><i class="icon icon-cogs"></i> {l s='Update' mod='utanvetellenor'}</h3>
+	<p class="alert alert-danger">
+		{l s='Update available' mod='utanvetellenor'} <a href="{$update->download_url}">{$update->version} ({$update->last_updated})</a>
+	</p>
+</div>
+{/if}

@@ -43,7 +43,7 @@ class Utanvetellenor extends Module
     {
         $this->name = 'utanvetellenor';
         $this->tab = 'checkout';
-        $this->version = '0.0.2';
+        $this->version = '0.0.3';
         $this->author = 'rrd';
         $this->need_instance = 1;
 
@@ -111,9 +111,19 @@ class Utanvetellenor extends Module
         $overrideExists = file_exists(_PS_ROOT_DIR_ . '/override/classes/checkout/PaymentOptionsFinder.php');
         $this->context->smarty->assign('overrideExists', $overrideExists);
 
+        $this->checkUpdates();
+
         $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
 
         return $output.$this->renderForm();
+    }
+
+    private function checkUpdates()
+    {
+        $response = json_decode(Tools::file_get_contents('https://webmania.cc/prestashop/ps-utanvetellenor.json'));
+        if ($this->version < $response->version) {
+            $this->context->smarty->assign('update', $response);
+        }
     }
 
     /**
