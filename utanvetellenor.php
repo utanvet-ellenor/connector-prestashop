@@ -224,8 +224,8 @@ class Utanvetellenor extends Module
                     ),
                     array(
                         'type' => 'select',
-                        'label' => $this->l('Payed - Change Order Status to'),
-                        'desc' => $this->l('Status on payed COD orders'),
+                        'label' => $this->l('Successful Status'),
+                        'desc' => $this->l('Status of successful Cash on Delivery orders.'),
                         'name' => 'UTANVETELLENOR_PAID_ORDERSTATE',
                         'required' => true,
                         'options' => array(
@@ -236,8 +236,8 @@ class Utanvetellenor extends Module
                     ),
                     array(
                         'type' => 'select',
-                        'label' => $this->l('Refused - Change Order Status to'),
-                        'desc' => $this->l('Status on refused COD orders'),
+                        'label' => $this->l('Refused Status'),
+                        'desc' => $this->l('Status of refused Cash on Delivery orders.'),
                         'name' => 'UTANVETELLENOR_REFUSED_ORDERSTATE',
                         'required' => true,
                         'options' => array(
