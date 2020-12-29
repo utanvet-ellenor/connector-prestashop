@@ -9,6 +9,11 @@
       "name": "rrd",
       "email": "rrd@webmania.cc",
       "homepage": "https://webmania.cc"
+    },
+    {
+      "name": "Ottó Radics dr.",
+      "email": "hello@utanvet-ellenor.hu",
+      "homepage": "https://utanvet-ellenor.hu"
     }
   ],
   "require": {
