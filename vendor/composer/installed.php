@@ -1,8 +1,8 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '0.0.3',
-    'version' => '0.0.3.0',
+    'pretty_version' => '1.0.4',
+    'version' => '1.0.4.0',
     'aliases' => 
     array (
     ),
@@ -65,8 +65,8 @@
     ),
     'rrd108/utanvetellenor' => 
     array (
-      'pretty_version' => '0.0.3',
-      'version' => '0.0.3.0',
+      'pretty_version' => '1.0.4',
+      'version' => '1.0.4.0',
       'aliases' => 
       array (
       ),
