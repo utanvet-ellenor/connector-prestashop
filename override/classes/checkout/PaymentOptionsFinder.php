@@ -31,22 +31,54 @@ class PaymentOptionsFinder extends PaymentOptionsFinderCore
     public function find()
     {
         $paymentOptions = parent::find();
-
         $customer = Context::getContext()->customer;
-        $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
-        $connector->threshold = Configuration::get('UTANVETELLENOR_THRESHOLD');
-        $reputation = json_decode($connector->get());
-
-        if($reputation->message->totalRate < Configuration::get('UTANVETELLENOR_THRESHOLD')) {
-            $filteredPaymentOptions = [];
-            foreach($paymentOptions as $module => $paymentOption) {
-                if(stripos($module, 'cod') === false) {
-                    $filteredPaymentOptions[$module] = $paymentOption;
-                }
-            }
-            return $filteredPaymentOptions;
+        $email = $customer->email ?? null;
+        if (!$email) {
+            return;
         }
 
-        return $paymentOptions;
+        /**
+         * Initialize UVB Connector
+         */
+        $publicApiKey = Configuration::get('UTANVETELLENOR_PUBLIC_KEY');
+        $privateApiKey = Configuration::get('UTANVETELLENOR_PRIVATE_KEY');
+        $production = Configuration::get('UTANVETELLENOR_LIVE_MODE');
+        $threshold = Configuration::get('UTANVETELLENOR_THRESHOLD');
+
+        /**
+         * If no API keys set, return.
+         */
+        if (!$publicApiKey || !$privateApiKey) {
+            return;
+        }
+
+        $connector = new UVBConnector(
+            $email,
+            $publicApiKey,
+            $privateApiKey,
+            $production
+        );
+
+        $connector->threshold = $threshold;
+        $reputation = json_decode($connector->get());
+
+        /**
+         * If reputation is above the threshold, return all payment options.
+         */
+        if ($threshold < $reputation->message->totalRate) {
+            return $paymentOptions;
+        }
+
+        /**
+         * If not, filter out all Cash on Delivery payment methods.
+         */
+        $filteredPaymentOptions = [];
+        foreach ($paymentOptions as $module => $paymentOption) {
+            if (stripos($module, 'cod') === false) {
+                $filteredPaymentOptions[$module] = $paymentOption;
+            }
+        }
+
+        return $filteredPaymentOptions;
     }
 }

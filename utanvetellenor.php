@@ -291,24 +291,64 @@ class Utanvetellenor extends Module
         $this->context->controller->addCSS($this->_path.'/views/css/front.css');
     }
 
+    /**
+     * @param $params
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookActionOrderStatusUpdate($params)
     {
-        if (in_array(
-            $params['newOrderStatus']->id,
-            [Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE'), Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')])) {
-            // we send in all customers, not just who payed via COD
-            $customer = new Customer((int) $params['cart']->id_customer);
-            $connector = new UVBConnector($customer->email, Configuration::get('UTANVETELLENOR_PUBLIC_KEY'), Configuration::get('UTANVETELLENOR_PRIVATE_KEY'), Configuration::get('UTANVETELLENOR_LIVE_MODE'));
-            if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_PAYED_ORDERSTATE')) {
-                $response = $connector->post(1);
-            }
-            if ($params['newOrderStatus']->id == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
-                $response = $connector->post(-1);
-            }
+        $orderId = $params['id_order'];
+        $newOrderStatusId = $params['newOrderStatus']->id;
+        $paidOrderState = Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE');
+        $refusedOrderState = Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE');
+
+        /**
+         * Check if the new order status is either the paid or the refused order state. If none of them, return.
+         */
+        if (!in_array($newOrderStatusId, [$paidOrderState, $refusedOrderState], false)) {
+            return;
         }
+
+        /**
+         * If no Customer e-mail is defined for the Order, return.
+         */
+        $order = new Order($orderId);
+        $customer = $order->getCustomer();
+        $email = $customer->email ?? null;
+        if (!$email) {
+            return;
+        }
+
+        /**
+         * Initialize UVB Connector
+         */
+        $publicApiKey = Configuration::get('UTANVETELLENOR_PUBLIC_KEY');
+        $privateApiKey = Configuration::get('UTANVETELLENOR_PRIVATE_KEY');
+        $production = Configuration::get('UTANVETELLENOR_LIVE_MODE');
+
+        /**
+         * If no API keys set, return.
+         */
+        if (!$publicApiKey || !$privateApiKey) {
+            return;
+        }
+
+        $connector = new UVBConnector(
+            $email,
+            $publicApiKey,
+            $privateApiKey,
+            $production
+        );
+
+        if ($newOrderStatusId == Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE')) {
+            $outcome = 1;
+        }
+        if ($newOrderStatusId == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
+            $outcome = -1;
+        }
+
+        $response = $connector->post($outcome);
     }
-
-
-    // TODO display current threshold to admin on the order page - widget?
-
 }
