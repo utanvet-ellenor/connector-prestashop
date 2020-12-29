@@ -94,7 +94,7 @@ class Utanvetellenor extends Module
         }
         return parent::install() &&
             $this->registerHook('header') &&
-            $this->registerHook('actionOrderStatusUpdate');
+            $this->registerHook('actionOrderStatusPostUpdate');
     }
 
     public function uninstall()
@@ -104,7 +104,7 @@ class Utanvetellenor extends Module
         Configuration::deleteByName('UTANVETELLENOR_REFUSED_ORDERSTATE');
 
         $this->unregisterHook('header');
-        $this->unregisterHook('actionOrderStatusUpdate');
+        $this->unregisterHook('actionOrderStatusPostUpdate');
 
         return parent::uninstall();
     }
@@ -283,7 +283,7 @@ class Utanvetellenor extends Module
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
-    public function hookActionOrderStatusUpdate($params)
+    public function hookActionOrderStatusPostUpdate($params)
     {
         $orderId = $params['id_order'];
         $newOrderStatusId = $params['newOrderStatus']->id;
