@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>utanvetellenor</name>
+    <displayName><![CDATA[Ut&aacute;nv&eacute;t Ellenőr]]></displayName>
+    <version><![CDATA[0.0.4]]></version>
+    <description><![CDATA[Check customers if they are ok to show COD]]></description>
+    <author><![CDATA[rrd]]></author>
+    <tab><![CDATA[checkout]]></tab>
+	<confirmUninstall><![CDATA[Are you sure you want to uninstall Utánvét Ellenőr?]]></confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
