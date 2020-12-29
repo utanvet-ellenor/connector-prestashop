@@ -75,26 +75,9 @@ class Utanvetellenor extends Module
         Configuration::updateValue('UTANVETELLENOR_PAID_ORDERSTATE', 4);
 
         if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
-            $orderState = new OrderState();
-            $orderState->name = array();
-            foreach (Language::getLanguages() as $language) {
-                $orderState->name[$language['id_lang']] = $this->l('Package Refused');
-            }
-            $orderState->send_email = false;
-            $orderState->color = '#AC448A';
-            $orderState->hidden = false;
-            $orderState->delivery = false;
-            $orderState->logable = false;
-            $orderState->invoice = false;
-            $orderState->module_name = $this->name;
-            if ($orderState->add()) {
-                copy(
-                    dirname(__FILE__).'/views/img/utanvet_ellenor_logo.gif',
-                    dirname(__FILE__).'/../../img/os/'.(int) $orderState->id.'.gif'
-                );
-            }
-            Configuration::updateValue('UTANVETELLENOR_REFUSED_ORDERSTATE', (int) $orderState->id);
+            Configuration::updateValue('UTANVETELLENOR_REFUSED_ORDERSTATE', $this->createRefusedOrderState());
         }
+
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('actionOrderStatusPostUpdate');
@@ -281,6 +264,40 @@ class Utanvetellenor extends Module
         foreach (array_keys($form_values) as $key) {
             Configuration::updateValue($key, Tools::getValue($key));
         }
+    }
+
+    /**
+     * Creates the refused order state.
+     *
+     * @return int
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function createRefusedOrderState()
+    {
+        $orderState = new OrderState();
+        $orderState->name = array();
+
+        foreach (Language::getLanguages() as $language) {
+            $orderState->name[$language['id_lang']] = $this->l('Package Refused');
+        }
+
+        $orderState->send_email = false;
+        $orderState->color = '#AC448A';
+        $orderState->hidden = false;
+        $orderState->delivery = false;
+        $orderState->logable = false;
+        $orderState->invoice = false;
+        $orderState->module_name = $this->name;
+
+        if ($orderState->add()) {
+            copy(
+                dirname(__FILE__).'/views/img/utanvet_ellenor_logo.gif',
+                dirname(__FILE__).'/../../img/os/'.(int) $orderState->id.'.gif'
+            );
+        }
+
+        return $orderState->id;
     }
 
     /**
