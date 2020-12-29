@@ -68,7 +68,10 @@ class Utanvetellenor extends Module
      */
     public function install()
     {
-        Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', true);
+        Configuration::updateValue('UTANVETELLENOR_LIVE_MODE', false);
+        Configuration::updateValue('UTANVETELLENOR_PUBLIC_KEY', '');
+        Configuration::updateValue('UTANVETELLENOR_PRIVATE_KEY', '');
+        Configuration::updateValue('UTANVETELLENOR_THRESHOLD', 0);
         Configuration::updateValue('UTANVETELLENOR_PAID_ORDERSTATE', 4);
 
         if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
@@ -100,6 +103,9 @@ class Utanvetellenor extends Module
     public function uninstall()
     {
         Configuration::deleteByName('UTANVETELLENOR_LIVE_MODE');
+        Configuration::deleteByName('UTANVETELLENOR_PUBLIC_KEY');
+        Configuration::deleteByName('UTANVETELLENOR_PRIVATE_KEY');
+        Configuration::deleteByName('UTANVETELLENOR_THRESHOLD');
         Configuration::deleteByName('UTANVETELLENOR_PAID_ORDERSTATE');
         Configuration::deleteByName('UTANVETELLENOR_REFUSED_ORDERSTATE');
 
