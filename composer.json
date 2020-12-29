@@ -2,7 +2,7 @@
   "name": "rrd108/utanvetellenor",
   "description": "UVB Connector for Prestashop",
   "type": "prestashop-module",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "license": "MIT",
   "authors": [
     {
