@@ -140,6 +140,17 @@ class Utanvetellenor extends Module
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => $this->context->language->id,
         );
+        $paymentMethodsToHide = Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
+
+        if ($paymentMethodsToHide) {
+            $paymentMethodsToHide = explode(',', $paymentMethodsToHide);
+
+            if (!empty($paymentMethodsToHide)) {
+                foreach ($paymentMethodsToHide as $key => $value) {
+                    $helper->tpl_vars['fields_value']['UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE[]_' . $value] = true;
+                }
+            }
+        }
 
         return $helper->generateForm(array($this->getConfigForm()));
     }
@@ -151,9 +162,9 @@ class Utanvetellenor extends Module
     {
         $orderStates = OrderState::getOrderStates($this->context->language->id);
         $paymentMethodsToHide = Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
-        $availablePaymentMethods = [];
-        foreach (PaymentModule::getInstalledPaymentModules() as $paymentModule) {
-            $availablePaymentMethods[] = $paymentModule['name'];
+        $availablePaymentMethods = PaymentModule::getInstalledPaymentModules();
+        foreach ($availablePaymentMethods as $key => $value) {
+            $availablePaymentMethods[$key]['val'] = $value['name'];
         }
 
         return array(
@@ -233,12 +244,17 @@ class Utanvetellenor extends Module
                         )
                     ),
                     array(
-                        'col' => 4,
-                        'type' => 'text',
-                        'desc' => $this->l('Comma-separated list of payment method handles. If the handle is set here, the payment method will be hidden if the reputation is below the threshold. Possible values are: ') . '<code>' . implode(', ', $availablePaymentMethods) . '</code>',
-                        'name' => 'UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE',
+                        'type' => 'checkbox',
                         'label' => $this->l('Payment methods to hide'),
+                        'desc' => $this->l('Hide these payment methods if the reputation is below the threshold.'),
+                        'name' => 'UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE[]',
+                        'multiple' => true,
                         'required' => true,
+                        'values' => array(
+                            'query' => $availablePaymentMethods,
+                            'id' => 'name',
+                            'name' => 'name'
+                        ),
                     ),
                 ),
                 'submit' => array(
@@ -277,6 +293,8 @@ class Utanvetellenor extends Module
         if (!Tools::isSubmit('submitUtanvetellenorModule')) {
             return;
         }
+
+        $_POST['UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE'] = implode(',', $_POST['UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE']);
 
         $form_values = $this->getConfigFormValues();
 
