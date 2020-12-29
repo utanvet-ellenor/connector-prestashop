@@ -105,13 +105,7 @@ class Utanvetellenor extends Module
      */
     public function getContent()
     {
-        /**
-         * If values have been submitted in the form, process.
-         */
-        if (((bool)Tools::isSubmit('submitUtanvetellenorModule')) == true) {
-            $this->postProcess();
-        }
-
+        $this->postProcess();
         $this->context->smarty->assign('module_dir', $this->_path);
 
         $overrideExists = file_exists(_PS_ROOT_DIR_ . '/override/classes/checkout/PaymentOptionsFinder.php');
