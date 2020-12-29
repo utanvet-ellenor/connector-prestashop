@@ -44,12 +44,20 @@ class PaymentOptionsFinder extends PaymentOptionsFinderCore
         $privateApiKey = Configuration::get('UTANVETELLENOR_PRIVATE_KEY');
         $production = Configuration::get('UTANVETELLENOR_LIVE_MODE');
         $threshold = Configuration::get('UTANVETELLENOR_THRESHOLD');
+        $paymentMethodsToHide = Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
 
         /**
-         * If no API keys set, return.
+         * If there are no payment methods to be hidden, return instantly.
+         */
+        if (!$paymentMethodsToHide && !count($paymentMethodsToHide) < 1) {
+            return $paymentOptions;
+        }
+
+        /**
+         * If no API keys are set, return.
          */
         if (!$publicApiKey || !$privateApiKey) {
-            return;
+            return $paymentOptions;
         }
 
         $connector = new UVBConnector(
@@ -73,12 +81,13 @@ class PaymentOptionsFinder extends PaymentOptionsFinderCore
          * If not, filter out all Cash on Delivery payment methods.
          */
         $filteredPaymentOptions = [];
+        $paymentMethodsToHide = explode(',', str_replace(' ', '', $paymentMethodsToHide));
         foreach ($paymentOptions as $module => $paymentOption) {
-            if (stripos($module, 'cod') === false) {
-                $filteredPaymentOptions[$module] = $paymentOption;
+            if (in_array($module, $paymentMethodsToHide)) {
+                unset($paymentOptions[$module]);
             }
         }
 
-        return $filteredPaymentOptions;
+        return $paymentOptions;
     }
 }

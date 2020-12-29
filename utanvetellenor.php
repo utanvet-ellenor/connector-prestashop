@@ -73,6 +73,7 @@ class Utanvetellenor extends Module
         Configuration::updateValue('UTANVETELLENOR_PRIVATE_KEY', '');
         Configuration::updateValue('UTANVETELLENOR_THRESHOLD', 0);
         Configuration::updateValue('UTANVETELLENOR_PAID_ORDERSTATE', 4);
+        Configuration::updateValue('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE', '');
 
         if (!Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
             Configuration::updateValue('UTANVETELLENOR_REFUSED_ORDERSTATE', $this->createRefusedOrderState());
@@ -91,6 +92,7 @@ class Utanvetellenor extends Module
         Configuration::deleteByName('UTANVETELLENOR_THRESHOLD');
         Configuration::deleteByName('UTANVETELLENOR_PAID_ORDERSTATE');
         Configuration::deleteByName('UTANVETELLENOR_REFUSED_ORDERSTATE');
+        Configuration::deleteByName('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
 
         $this->unregisterHook('header');
         $this->unregisterHook('actionOrderStatusPostUpdate');
@@ -154,6 +156,11 @@ class Utanvetellenor extends Module
     protected function getConfigForm()
     {
         $orderStates = OrderState::getOrderStates($this->context->language->id);
+        $paymentMethodsToHide = Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
+        $availablePaymentMethods = [];
+        foreach (PaymentModule::getInstalledPaymentModules() as $paymentModule) {
+            $availablePaymentMethods[] = $paymentModule['name'];
+        }
 
         return array(
             'form' => array(
@@ -231,6 +238,14 @@ class Utanvetellenor extends Module
                             'name' => 'name'
                         )
                     ),
+                    array(
+                        'col' => 4,
+                        'type' => 'text',
+                        'desc' => $this->l('Comma-separated list of payment method handles. If the handle is set here, the payment method will be hidden if the reputation is below the threshold. Possible values are: ') . '<code>' . implode(', ', $availablePaymentMethods) . '</code>',
+                        'name' => 'UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE',
+                        'label' => $this->l('Payment methods to hide'),
+                        'required' => true,
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -244,14 +259,17 @@ class Utanvetellenor extends Module
      */
     protected function getConfigFormValues()
     {
-        return array(
+        $config = [
             'UTANVETELLENOR_LIVE_MODE' => Configuration::get('UTANVETELLENOR_LIVE_MODE'),
             'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY'),
             'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY'),
             'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD'),
             'UTANVETELLENOR_PAID_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE'),
             'UTANVETELLENOR_REFUSED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'),
-        );
+            'UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE' => Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE')
+        ];
+
+        return $config;
     }
 
     /**
@@ -259,6 +277,13 @@ class Utanvetellenor extends Module
      */
     protected function postProcess()
     {
+        /**
+         * If values have not been submitted in the form, return.
+         */
+        if (!Tools::isSubmit('submitUtanvetellenorModule')) {
+            return;
+        }
+
         $form_values = $this->getConfigFormValues();
 
         foreach (array_keys($form_values) as $key) {
@@ -338,7 +363,7 @@ class Utanvetellenor extends Module
         $production = Configuration::get('UTANVETELLENOR_LIVE_MODE');
 
         /**
-         * If no API keys set, return.
+         * If no API keys are set, return.
          */
         if (!$publicApiKey || !$privateApiKey) {
             return;
