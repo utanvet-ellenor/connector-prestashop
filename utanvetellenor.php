@@ -101,14 +101,10 @@ class Utanvetellenor extends Module
     {
         Configuration::deleteByName('UTANVETELLENOR_LIVE_MODE');
         Configuration::deleteByName('UTANVETELLENOR_PAID_ORDERSTATE');
+        Configuration::deleteByName('UTANVETELLENOR_REFUSED_ORDERSTATE');
 
         $this->unregisterHook('header');
         $this->unregisterHook('actionOrderStatusUpdate');
-
-        $orderState = new OrderState((int) Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'));
-        if ($orderState->id) {
-            $orderState->delete();
-        }
 
         return parent::uninstall();
     }
