@@ -245,12 +245,12 @@ class Utanvetellenor extends Module
     protected function getConfigFormValues()
     {
         return array(
-            'UTANVETELLENOR_LIVE_MODE' => Configuration::get('UTANVETELLENOR_LIVE_MODE', false),
-            'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY', null),
-            'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY', null),
-            'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD', 0,5),
-            'UTANVETELLENOR_PAID_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE', 4),
-            'UTANVETELLENOR_REFUSED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE', 4),
+            'UTANVETELLENOR_LIVE_MODE' => Configuration::get('UTANVETELLENOR_LIVE_MODE'),
+            'UTANVETELLENOR_PUBLIC_KEY' => Configuration::get('UTANVETELLENOR_PUBLIC_KEY'),
+            'UTANVETELLENOR_PRIVATE_KEY' => Configuration::get('UTANVETELLENOR_PRIVATE_KEY'),
+            'UTANVETELLENOR_THRESHOLD' => Configuration::get('UTANVETELLENOR_THRESHOLD'),
+            'UTANVETELLENOR_PAID_ORDERSTATE' => Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE'),
+            'UTANVETELLENOR_REFUSED_ORDERSTATE' => Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'),
         );
     }
 
