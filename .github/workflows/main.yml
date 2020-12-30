@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: utanvetellenor.zip
-          path: utanvetellenor
+          path: .
