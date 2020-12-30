@@ -30,9 +30,10 @@ jobs:
         run: |
           composer install
           cd .. && cp -R ps-utanvet-ellenor utanvetellenor
-          zip -r0 utanvetellenor.zip utanvetellenor -x "utanvetellenor/.git/*" "utanvetellenor/.github/*" "utanvetellenor/.auto-changelog" "utanvetellenor/.gitignore" "utanvetellenor/.composer-version.js" "utanvetellenor/package.json" "utanvetellenor/package-lock.json"
-          rm -Rf utanvetellenor
+          rm -Rf "utanvetellenor/.git/*" "utanvetellenor/.github/*" "utanvetellenor/.auto-changelog" "utanvetellenor/.gitignore" "utanvetellenor/.composer-version.js" "utanvetellenor/package.json" "utanvetellenor/package-lock.json"
       
-      - uses: actions/upload-artifact@v2
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
-          path: utanvetellenor.zip
+          name: utanvetellenor.zip
+          path: utanvetellenor
