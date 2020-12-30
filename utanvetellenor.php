@@ -171,7 +171,6 @@ class Utanvetellenor extends Module
     protected function getConfigForm()
     {
         $orderStates = OrderState::getOrderStates($this->context->language->id);
-        $paymentMethodsToHide = Configuration::get('UTANVETELLENOR_PAYMENT_METHODS_TO_HIDE');
         $availablePaymentMethods = PaymentModule::getInstalledPaymentModules();
         foreach ($availablePaymentMethods as $key => $value) {
             $availablePaymentMethods[$key]['val'] = $value['name'];
