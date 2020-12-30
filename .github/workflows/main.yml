@@ -7,8 +7,8 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main, create-release-action ]
-  pull_request:
-    branches: [ main, create-release-action ]
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,18 +23,35 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a set of commands using the runners shell
-      - name: Create drag'n'drop installable PrestaShop package
-        run: |
-          mkdir -p ~/artifact/utanvetellenor
-          composer install
-          rm -Rf "utanvetellenor/.git/*" "utanvetellenor/.github/*" "utanvetellenor/.auto-changelog" "utanvetellenor/.gitignore" "utanvetellenor/.composer-version.js" "utanvetellenor/package.json" "utanvetellenor/package-lock.json"
-          mv * ~/artifact/utanvetellenor
+      - name: Checkout code
+        uses: actions/checkout@v2
       
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      - name: Build Release
+        run: |
+          composer install
+          cd .. && cp -R ps-utanvet-ellenor utanvetellenor
+          zip -r0 utanvetellenor.zip utanvetellenor -x "utanvetellenor/.git/*" "utanvetellenor/.github/*" "utanvetellenor/.auto-changelog" "utanvetellenor/.gitignore" "utanvetellenor/.composer-version.js" "utanvetellenor/package.json" "utanvetellenor/package-lock.json"
+          rm -Rf utanvetellenor
+          
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: utanvetellenor
-          path: ~/artifact/
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./utanvetellenor.zip
+          asset_name: utanvetellenor.zip
+          asset_content_type: application/zip
+
