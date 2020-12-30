@@ -28,6 +28,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create drag'n'drop installable PrestaShop package
         run: |
+          composer install
           cd .. && cp -R ps-utanvet-ellenor utanvetellenor
           zip -r0 utanvetellenor.zip utanvetellenor -x "utanvetellenor/.git/*" "utanvetellenor/.github/*" "utanvetellenor/.auto-changelog" "utanvetellenor/.gitignore" "utanvetellenor/.composer-version.js" "utanvetellenor/package.json" "utanvetellenor/package-lock.json"
           rm -Rf utanvetellenor
