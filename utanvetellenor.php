@@ -43,7 +43,7 @@ class Utanvetellenor extends Module
     {
         $this->name = 'utanvetellenor';
         $this->tab = 'checkout';
-        $this->version = '1.0.5';
+        $this->version = '1.0.6';
         $this->author = 'rrd';
         $this->need_instance = 1;
 
