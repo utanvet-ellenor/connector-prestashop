@@ -2,7 +2,7 @@
   "name": "rrd108/utanvetellenor",
   "description": "Utánvét Ellenőr integration for Prestashop",
   "type": "prestashop-module",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "license": "MIT",
   "authors": [
     {
