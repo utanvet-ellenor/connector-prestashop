@@ -120,7 +120,7 @@ class Utanvetellenor extends Module
 
     private function checkUpdates()
     {
-        $response = json_decode(Tools::file_get_contents('https://webmania.cc/prestashop/ps-utanvetellenor.json'));
+        $response = json_decode(Tools::file_get_contents('https://utanvet-ellenor.hu/api/v1/plugins/prestashop'));
         if ($this->version < $response->version) {
             $this->context->smarty->assign('update', $response);
         }
