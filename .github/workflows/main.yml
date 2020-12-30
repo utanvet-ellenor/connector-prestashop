@@ -29,5 +29,5 @@ jobs:
       - name: Create drag'n'drop installable PrestaShop package
         run: |
           cd .. && cp -R ps-utanvet-ellenor utanvetellenor
-          zip utanvetellenor.zip utanvetellenor -x ".git/*" ".github/*"
+          zip -r0 utanvetellenor.zip utanvetellenor -x ".git/*" ".github/*"
           rm -Rf utanvetellenor
