@@ -321,6 +321,13 @@ class Utanvetellenor extends Module
      */
     public function createRefusedOrderState()
     {
+        $orderStates = OrderState::getOrderStates($this->context->language->id);
+        foreach ($orderStates as $orderState) {
+            if ($orderState['module_name'] === $this->name) {
+                return $orderState['id_order_state'];
+            }
+        }
+
         $orderState = new OrderState();
         $orderState->name = array();
 
