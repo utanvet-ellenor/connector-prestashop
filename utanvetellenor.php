@@ -43,7 +43,7 @@ class Utanvetellenor extends Module
     {
         $this->name = 'utanvetellenor';
         $this->tab = 'checkout';
-        $this->version = '1.0.6';
+        $this->version = '1.0.7';
         $this->author = 'rrd';
         $this->need_instance = 1;
 
@@ -227,6 +227,7 @@ class Utanvetellenor extends Module
                         'desc' => $this->l('Calculated with the following formula: (good-bad) / all, so a 0.5 reputation can mean 6 successful and 2 rejected deliveries.'),
                         'name' => 'UTANVETELLENOR_THRESHOLD',
                         'label' => $this->l('Reputation threshold'),
+                        'required' => true,
                     ),
                     array(
                         'type' => 'select',
