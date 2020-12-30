@@ -28,5 +28,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create drag'n'drop installable PrestaShop package
         run: |
-          cd .. && mv ps-utanvet-ellenor utanvetellenor
+          cd .. && cp -R ps-utanvet-ellenor utanvetellenor
           zip utanvetellenor.zip utanvetellenor -x ".git/*" ".github/*"
+          rm -Rf utanvetellenor
