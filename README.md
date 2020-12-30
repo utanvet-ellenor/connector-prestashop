@@ -10,7 +10,7 @@ This module was tested on PrestaShop 1.7.7.0 and requires at least PHP 7.0.
 ## Installation
 
 1. [Register](https://utanvet-ellenor.hu/register) to obtain API keys, then set them in the module's settings.
-2. Download the [latest release](https://github.com/rrd108/ps-utanvet-ellenor/releases/tag/latest).
+2. Download the `utanvetellenor.zip` file from the [latest release](https://github.com/rrd108/ps-utanvet-ellenor/releases/tag/latest).
 3. Navigate to Modules > Module Manager.
 4. Click on `Upload a module`.
 5. Drop or select the previously downloaded ZIP archive.
