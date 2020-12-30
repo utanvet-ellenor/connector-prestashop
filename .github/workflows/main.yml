@@ -28,12 +28,13 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create drag'n'drop installable PrestaShop package
         run: |
+          mkdir -p ~/utanvetellenor
           composer install
-          cd .. && cp -R ps-utanvet-ellenor utanvetellenor
           rm -Rf "utanvetellenor/.git/*" "utanvetellenor/.github/*" "utanvetellenor/.auto-changelog" "utanvetellenor/.gitignore" "utanvetellenor/.composer-version.js" "utanvetellenor/package.json" "utanvetellenor/package-lock.json"
+          mv * ~/utanvetellenor
       
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: utanvetellenor.zip
-          path: .
+          name: utanvetellenor
+          path: ~/utanvetellenor
