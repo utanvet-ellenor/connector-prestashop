@@ -31,5 +31,6 @@ $_MODULE['<{utanvetellenor}prestashop>configure_e239c02fb8b80f2b9b30d83b12894f81
 $_MODULE['<{utanvetellenor}prestashop>configure_6da8e67225fdcfa78c3ea5dc3154b849'] = 'Felülírás';
 $_MODULE['<{utanvetellenor}prestashop>configure_5edf2f04cf0b21ff3a2c21647a1abf61'] = 'A felülírás telepítése sikeres.';
 $_MODULE['<{utanvetellenor}prestashop>configure_3d3fd387b06597fb8d6464d160589a3c'] = 'HIBA: A felülírás nincs telepítve';
+$_MODULE['<{utanvetellenor}prestashop>configure_7a5b61dced1179919930bd3ad10cab41'] = 'Ezt úgy tudod javítani ha a PSROOT/modules/utanvetellenor/override/classes mappát annak teljes tartalmával együtt átmásolod a PSROOT/override/ mappába';
 $_MODULE['<{utanvetellenor}prestashop>configure_06933067aafd48425d67bcb01bba5cb6'] = 'Frissítés';
 $_MODULE['<{utanvetellenor}prestashop>configure_217b4168969fa53f433f7f6da261a262'] = 'Frissítés elérhető';

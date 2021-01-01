@@ -44,6 +44,7 @@
 		{else}
 			<p class="alert alert-danger">
 				{l s='ERROR: Override is not installed' mod='utanvetellenor'}
+				{l s='You can fix this by manually copying PSROOT/modules/utanvetellenor/override/classes folder with all of its contents to PSROOT/override/ folder' mod='utanvetellenor'}
 			</p>
 		{/if}
 </div>
