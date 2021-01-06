@@ -45,10 +45,10 @@ All inputs are hashed with SHA-256 by the module on your server. This means:
 * On "check requests" we don't receive the e-mail address, just a hash, and we provide only a couple of "numbers" about that hash. There is no way for us to know what was the original string before hashing.
 * In order to use our services, you MUST notify your users that "Automated individual decision-making" might be applied during checkout. For more information, please see GDPR Art. 22.
 
-> Note: this is not a legal advice. Consult your attourney before using this service in production.
+> Note: this is not legal advice. Consult your lawyer before using this service in production.
 
 ## Found a bug?
 
 Check the issues or [open a new one](https://github.com/rrd108/ps-utanvet-ellenor/issues)!
 
-Brought to you by [Rādhārādhya dāsa](https://webmania.cc/) & [dr. Ottó Radics](https://www.webmenedzser.hu)
+Brought to you by [rrd](https://webmania.cc/) & [dr. Ottó Radics](https://www.webmenedzser.hu)
