@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6edca65e2a11997ca78589b0f439ec3",
+    "content-hash": "8acfe6014b38ad4fc178a394317595dc",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -553,16 +553,16 @@
         },
         {
             "name": "webmenedzser/uvb-connector",
-            "version": "1.3.0",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmenedzser/uvb-connector.git",
-                "reference": "4f7312edc02fb212daf77c39815984cd82dafe0d"
+                "reference": "762db4425ebed0a1bc85b142e883f81894717272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmenedzser/uvb-connector/zipball/4f7312edc02fb212daf77c39815984cd82dafe0d",
-                "reference": "4f7312edc02fb212daf77c39815984cd82dafe0d",
+                "url": "https://api.github.com/repos/webmenedzser/uvb-connector/zipball/762db4425ebed0a1bc85b142e883f81894717272",
+                "reference": "762db4425ebed0a1bc85b142e883f81894717272",
                 "shasum": ""
             },
             "require": {
@@ -589,9 +589,9 @@
             "description": "UVB API Connector",
             "support": {
                 "issues": "https://github.com/webmenedzser/uvb-connector/issues",
-                "source": "https://github.com/webmenedzser/uvb-connector/tree/1.3.0"
+                "source": "https://github.com/webmenedzser/uvb-connector/tree/1.3.2"
             },
-            "time": "2020-12-18T21:41:02+00:00"
+            "time": "2023-08-28T10:56:52+00:00"
         }
     ],
     "packages-dev": [],
@@ -604,5 +604,5 @@
         "php": ">=7.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }
