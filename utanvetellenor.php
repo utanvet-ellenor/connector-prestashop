@@ -412,6 +412,6 @@ class Utanvetellenor extends Module
             $outcome = -1;
         }
 
-        $response = $connector->post($outcome);
+        $response = $connector->post($outcome, $orderId);
     }
 }
