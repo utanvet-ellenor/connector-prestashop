@@ -34,7 +34,7 @@ class PaymentOptionsFinder extends PaymentOptionsFinderCore
         $customer = Context::getContext()->customer;
         $email = $customer->email ?? null;
         if (!$email) {
-            return;
+            return $paymentOptions;
         }
 
         /**
