@@ -405,11 +405,14 @@ class Utanvetellenor extends Module
             $production
         );
 
-        if ($newOrderStatusId == Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE')) {
-            $outcome = 1;
-        }
-        if ($newOrderStatusId == Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE')) {
-            $outcome = -1;
+        switch ($newOrderStatusId) {
+            case Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE'):
+                $outcome = 1;
+                break;
+
+            case Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'):
+                $outcome = -1;
+                break;
         }
 
         $response = $connector->post($outcome, $orderId);
