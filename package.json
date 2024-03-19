@@ -1,7 +1,7 @@
 {
-  "name": "ps-utanvet-ellenor",
+  "name": "connector-prestashop",
   "description": "Utánvét Ellenőr integration for Prestashop",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": [
     {
       "name": "rrd",
@@ -10,13 +10,13 @@
     },
     {
       "name": "dr. Otto Radics",
-      "email": "otto@webmenedzser.hu",
-      "url": "https://www.webmenedzser.hu"
+      "email": "hello@utanvet-ellenor.hu",
+      "url": "https://utanvet-ellenor.hu"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rrd108/ps-utanvet-ellenor.git"
+    "url": "git+https://github.com/utanvet-ellenor/connector-prestashop.git"
   },
   "scripts": {
     "changelog": "auto-changelog -p",
