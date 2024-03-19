@@ -346,8 +346,8 @@ class Utanvetellenor extends Module
 
         if ($orderState->add()) {
             copy(
-                dirname(__FILE__).'/views/img/utanvet_ellenor_logo.gif',
-                dirname(__FILE__).'/../../img/os/'.(int) $orderState->id.'.gif'
+                __DIR__ .'/views/img/utanvet_ellenor_logo.gif',
+                __DIR__ .'/../../img/os/'.(int) $orderState->id.'.gif'
             );
         }
 
