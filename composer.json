@@ -2,7 +2,7 @@
   "name": "utanvet-ellenor/connector-prestashop",
   "description": "Utánvét Ellenőr integration for Prestashop",
   "type": "prestashop-module",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "authors": [
     {
