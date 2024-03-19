@@ -414,7 +414,40 @@ class Utanvetellenor extends Module
                 $outcome = -1;
                 break;
         }
+        $orderDetails = $this->getOrderDetails($order);
 
-        $response = $connector->post($outcome, $orderId);
+        $response = $connector->post(
+            $outcome,
+            $orderId,
+            $orderDetails['phoneNumber'],
+            $orderDetails['countryCode'],
+            $orderDetails['postalCode'],
+            $orderDetails['addressLine'],
+        );
+    }
+
+    protected function getOrderDetails(Order $order)
+    {
+        $details = [
+            'phoneNumber' => '',
+            'countryCode' => '',
+            'postalCode' => '',
+            'addressLine' => ''
+        ];
+
+        $deliveryAddressId = $order->id_address_delivery;
+        if (!$deliveryAddressId) {
+            return $details;
+        }
+
+        $address = new Address($deliveryAddressId);
+        $country = new Country($address->id_country);
+
+        $details['phoneNumber'] = $address->phone_mobile ?: $address->phone;
+        $details['countryCode'] = $country->iso_code;
+        $details['postalCode'] = $address->postcode;
+        $details['addressLine'] = implode(" ", [$address->address1, $address->address2]);
+
+        return $details;
     }
 }
