@@ -406,11 +406,11 @@ class Utanvetellenor extends Module
         );
 
         switch ($newOrderStatusId) {
-            case Configuration::get('UTANVETELLENOR_PAID_ORDERSTATE'):
+            case $paidOrderState:
                 $outcome = 1;
                 break;
 
-            case Configuration::get('UTANVETELLENOR_REFUSED_ORDERSTATE'):
+            case $refusedOrderState:
                 $outcome = -1;
                 break;
         }

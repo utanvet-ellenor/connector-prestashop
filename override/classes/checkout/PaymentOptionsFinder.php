@@ -80,7 +80,6 @@ class PaymentOptionsFinder extends PaymentOptionsFinderCore
         /**
          * If not, filter out all Cash on Delivery payment methods.
          */
-        $filteredPaymentOptions = [];
         $paymentMethodsToHide = explode(',', str_replace(' ', '', $paymentMethodsToHide));
         foreach ($paymentOptions as $module => $paymentOption) {
             if (in_array($module, $paymentMethodsToHide)) {
